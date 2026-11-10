@@ -58,6 +58,10 @@ class MainActivity : AppCompatActivity() {
 
         swButton.setOnCheckedChangeListener { _, checked -> prefs.showButton = checked }
 
+        val swAutoStart = findViewById<MaterialSwitch>(R.id.swAutoStart)
+        swAutoStart.isChecked = prefs.autoStart
+        swAutoStart.setOnCheckedChangeListener { _, checked -> prefs.autoStart = checked }
+
         findViewById<MaterialButton>(R.id.btnLogin).setOnClickListener {
             saveFields()
             startActivity(Intent(this, LoginActivity::class.java))

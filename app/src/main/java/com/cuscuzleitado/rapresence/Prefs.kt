@@ -21,4 +21,8 @@ class Prefs(context: Context) {
     var showButton: Boolean
         get() = sp.getBoolean("show_button", true)
         set(v) { sp.edit().putBoolean("show_button", v).apply() }
+
+    var autoStart: Boolean
+        get() = sp.getBoolean("auto_start", true)
+        set(v) { sp.edit().putBoolean("auto_start", v).apply() }
 }

@@ -106,6 +106,13 @@
             android:layout_marginTop="16dp"
             android:text="Mostrar botão do meu perfil no RA" />
 
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swAutoStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Iniciar sozinho ao ligar o celular" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnToggle"
             android:layout_width="match_parent"

@@ -169,6 +169,19 @@ class PresenceService : Service() {
         return System.currentTimeMillis() - date.time < Config.ACTIVE_WINDOW_MINUTES * 60_000
     }
 
+    /** Removes the game title the RA text repeats at the end (or the whole text if it is just the title). */
+    private fun cleanRichPresence(raw: String, title: String): String {
+        val t = title.trim()
+        var s = raw.trim()
+        if (t.isEmpty()) return s
+        val q = Regex.escape(t)
+        val only = Regex("^(?:Playing\\s+)?$q$", RegexOption.IGNORE_CASE)
+        if (only.containsMatchIn(s)) return ""
+        val tail = Regex("\\s*\\|\\s*(?:Playing\\s+)?$q\\s*$", RegexOption.IGNORE_CASE)
+        s = tail.replace(s, "").trim().trimEnd('|').trim()
+        return s
+    }
+
     private fun buildActivity(
         game: RaGame,
         state: String,
@@ -184,11 +197,12 @@ class PresenceService : Service() {
             .put("type", 0)
             .put("name", game.title)
             .put("application_id", Config.DISCORD_CLIENT_ID)
-            .put("details", game.title)
-            .put("state", state.take(128))
             .put("timestamps", JSONObject().put("start", startedAt))
             .put("assets", assets)
-            .put("status_display_type", 2)
+
+        val details = cleanRichPresence(state, game.title)
+        if (details.isNotBlank()) a.put("details", details.take(128))
+        if (game.consoleName.isNotBlank()) a.put("state", "(${game.consoleName})")
 
         if (showButton) {
             a.put("buttons", JSONArray().put("Perfil no RetroAchievements"))
